@@ -57,7 +57,7 @@ class TestGeometryFieldRenderer(unittest.TestCase):
         
         form = spot_fieldset.render()
         
-        ok_("init_map(" in form, 'Template was not rendered')
+        ok_("geoformalchemy.init_map(" in form, 'Template was not rendered')
         ok_("'Point'," in form, 'OpenLayers geometry was not mapped correctly ')
         ok_("false," in form, 'Geometry should not be a collection')
         ok_(isinstance(session.scalar_args[0], functions.wkt), 'The geometry was not queried as WKT');

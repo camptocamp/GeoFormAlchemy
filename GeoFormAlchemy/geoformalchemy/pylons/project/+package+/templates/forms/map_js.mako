@@ -39,7 +39,8 @@ OpenLayers.Control.ModifyFeature.prototype.handleKeypress = function(evt) {
         }
     };
 
-function init_map(
+var geoformalchemy = {};
+geoformalchemy.init_map = function (
         field_name,
         read_only,
         is_collection,
@@ -197,4 +198,4 @@ function init_map(
     } else {
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
     }   
-}
+};

@@ -42,7 +42,7 @@ options['openlayers_lib'] = 'http://openlayers.org/api/OpenLayers.js'
     <div id="map_${field_name}" class="formmap_${field_name}"></div>
     <script type="text/javascript">
         <%include file="map_js.mako" />
-        init_map(
+        geoformalchemy.init_map(
                 '${field_name}',
                 ${read_only},
                 ${is_collection},
