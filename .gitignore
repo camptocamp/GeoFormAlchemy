@@ -1,0 +1,3 @@
+*.pyc
+GeoFormAlchemy/GeoFormAlchemy.egg-info
+demoapp/demoapp.egg-info
