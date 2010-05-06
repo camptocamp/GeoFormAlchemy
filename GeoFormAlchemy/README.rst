@@ -37,12 +37,8 @@ GeoFormAlchemy includes a Paster `Pylons template <http://wiki.pylonshq.com/disp
 that builds upon `FormAlchemy's administration interface <http://docs.formalchemy.org/ext/pylons.html>`_ 
 for Pylons. 
 
-If you want to use GeoFormAlchemy in your Pylons application, can run ``paster create`` with the 
+If you want to use GeoFormAlchemy in your Pylons application, run ``paster create`` with the 
 GeoFormAlchemy template::
-
-    $ paster create -t pylons_fa your_app
-    
-Now you can run ``paster create`` with the GeoFormAlchemy template::
 
     $ paster create -t geo_fa your_app
     [..]
