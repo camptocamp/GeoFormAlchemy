@@ -20,10 +20,10 @@ Installation
     
 **Manual installation for development**:
 
-Download the source code as `archive <http://github.com/camptocamp/geoformalchemy/zipball/master>`_
+Download the source code as `archive <http://github.com/camptocamp/GeoFormAlchemy/zipball/master>`_
 or clone the GIT repository::
 
-    git clone http://github.com/camptocamp/geoformalchemy.git GeoFormAlchemy
+    git clone http://github.com/camptocamp/GeoFormAlchemy.git GeoFormAlchemy
     
 Then run the setup::
 
@@ -37,14 +37,19 @@ GeoFormAlchemy includes a Paster `Pylons template <http://wiki.pylonshq.com/disp
 that builds upon `FormAlchemy's administration interface <http://docs.formalchemy.org/ext/pylons.html>`_ 
 for Pylons. 
 
-If you want to use GeoFormAlchemy in your Pylons application, you first will have to apply the
-`Pylons template of FormAlchemy <http://docs.formalchemy.org/pylons_sample.html>`_ on your project::
+If you want to use GeoFormAlchemy in your Pylons application, can run ``paster create`` with the 
+GeoFormAlchemy template::
 
     $ paster create -t pylons_fa your_app
     
 Now you can run ``paster create`` with the GeoFormAlchemy template::
 
     $ paster create -t geo_fa your_app
+    [..]
+    Enter admin_controller (Add formalchemy's admin controller) [False]: True
+    Enter template_engine (mako/genshi/jinja2/etc: Template language) ['mako']: mako
+    Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: True
+    [..]
     
 Then the GeoFormAlchemy extension has to be activated. Open the file ``your_app/forms/__init__.py`` and
 add the following lines at the end of the file::
@@ -120,7 +125,7 @@ FormAlchemy and GeoFormAlchemy. The template files are located in the folder
 ``your_app/templates/forms``. 
 
 GeoFormAlchemy uses the template files ``map_js.mako`` and ``map.mako``. In ``map.mako`` you can set most of the
-options that you can also use as `field modification <#geoformalchemy-options>`_. But unlike to field modifications,
+options that you can also use as field modification. But unlike to field modifications,
 the options set in the template file are used for the geometry fields of all models, whereas the options
 set as field modification are only used for the field they were set on. ::
 
