@@ -12,7 +12,7 @@ setup(name='GeoFormAlchemy',
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Framework :: Pylons',
@@ -23,7 +23,7 @@ setup(name='GeoFormAlchemy',
         'Topic :: Text Processing :: Markup :: HTML'
         ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='gis sqlalchemy geoalchemy formalchemy',
-      license='LGPLv3',
+      license='MIT',
       packages=find_packages(exclude=['tests']),
       include_package_data=True,
       zip_safe=True,
