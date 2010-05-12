@@ -31,7 +31,7 @@ def init_model(engine):
                 dbapi_con.execute("select load_extension('/usr/local/lib/libspatialite.so')")
                 dbapi_con.enable_load_extension(False)
 
-    engine.pool.add_listener(SpatialiteConnectionListener())
+        engine.pool.add_listener(SpatialiteConnectionListener())
 
 
 ## Non-reflected tables may be defined and mapped at module level
