@@ -1,44 +1,92 @@
-## http://trac.openlayers.org/attachment/ticket/1882/ModifyFeature-delete.diff
-OpenLayers.Control.ModifyFeature.prototype.handleKeypress = function(evt) {
-        var code = evt.keyCode;
+/**
+ * Class: DeleteFeatureControl
+ * Control to delete features. It is supposed to be used together
+ *      with a <OpenLayers.Control.ModifyFeature> control, which 
+ *      must be set in the constructor.
+ *      The control is activated when a feature is selected with
+ *      the <OpenLayers.Control.ModifyFeature> control. Then 
+ *      a click on the DeleteFeature control deletes the feature.
+ *
+ * Inherits From:
+ *  - <OpenLayers.Control>
+ */
+DeleteFeatureControl = OpenLayers.Class(OpenLayers.Control, {
+
+    /**
+     * Property: type
+     * {String} The type of <OpenLayers.Control> -- When added to a 
+     *     <Control.Panel>, 'type' is used by the panel to determine how to 
+     *     handle our events.
+     */
+    type: OpenLayers.Control.TYPE_BUTTON,
+
+    /**
+     * Constructor: DeleteFeatureControl
+     * Creates a new delete feature control.
+     *
+     * Parameters:
+     * modifyFeatureControl - {<OpenLayers.Control.ModifyFeature>} ModifyFeature control that
+     *     is used to select features.
+     * options - {Object} Optional object whose properties will be set on the
+     *     control.
+     */
+    initialize: function (modifyFeatureControl, options) {
+        this.modifyFeatureControl = modifyFeatureControl;
         
-        // check for delete key
-        if(this.feature &&
-           !this.dragControl.handlers.drag.dragging &&
-           OpenLayers.Util.indexOf(this.deleteCodes, code) != -1) {
-            var vertex = this.dragControl.feature;
-            if(vertex &&
-               OpenLayers.Util.indexOf(this.vertices, vertex) != -1 &&
-               vertex.geometry.parent) {
-                // remove the vertex
-                vertex.geometry.parent.removeComponent(vertex.geometry);
-                this.layer.drawFeature(this.feature, this.standalone ?
-                                       undefined :
-                                       this.selectControl.renderIntent);
-                this.resetVertices();
-                this.setFeatureState();
-                this.onModification(this.feature);
-                this.layer.events.triggerEvent("featuremodified", 
-                                               {feature: this.feature});
-            } else {
-                // if not pointing to a vertex, remove the whole feature
-                var feature = this.feature;
-                
-                var continueRemoving = this.layer.events.triggerEvent("beforefeatureremoved", 
-                                               {feature: feature});
-                if (continueRemoving === false) {
-                    return;
-                }
+        modifyFeatureControl.layer.events.register("beforefeaturemodified", 
+                this, this.handleFeatureSelected);
+        modifyFeatureControl.layer.events.register("afterfeaturemodified", 
+                this, this.handleFeatureUnSelected);
+        
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+    },
 
-                this.layer.removeFeatures([feature], {silent: true});
-                feature.state = OpenLayers.State.DELETE;
-                this.layer.events.triggerEvent("featureremoved", 
-                                           {feature: feature});
-                this.unselectFeature(feature);
+    /**
+     * Method: handleFeatureSelected
+     * Called before a feature is selected with the ModifyFeature control. Activates
+     *      the control by changing the 'displayClass' of the DIV.
+     */
+    handleFeatureSelected : function () {
+        this.panel_div.className = this.displayClass + 'ItemActive';
+    },
+
+    /**
+     * Method: handleFeatureUnSelected
+     * Called when a feature is unselected with the ModifyFeature control. Deactivates
+     *      the control by changing the 'displayClass' of the DIV.
+     */
+    handleFeatureUnSelected : function() {
+        this.panel_div.className = this.displayClass + 'ItemInactive';
+    },
+    
+    /**
+     * Method: trigger
+     * Called when the control is clicked. Deletes the selected
+     *      feature.
+     */
+    trigger: function () {
+        if (this.modifyFeatureControl.feature) {
+            var layer = this.modifyFeatureControl.layer;
+            var feature = this.modifyFeatureControl.feature;
+            
+            var continueRemoving = layer.events.triggerEvent("beforefeatureremoved", 
+                    {feature: feature});
+            
+            if (continueRemoving === false) {
+                return;
             }
+            
+            layer.removeFeatures([feature], {silent: true});
+            feature.state = OpenLayers.State.DELETE;
+            layer.events.triggerEvent("featureremoved", 
+                            {feature: feature});
+            this.modifyFeatureControl.unselectFeature(feature);
         }
-    };
+    },
 
+    CLASS_NAME: "DeleteFeatureControl"
+});    
+    
 var geoformalchemy = {};
 geoformalchemy.init_map = function (
         field_name,
@@ -162,6 +210,11 @@ geoformalchemy.init_map = function (
         
         var controlModifyFeature = new OpenLayers.Control.ModifyFeature(vlayer,
                 {'displayClass': 'olControlModifyFeature'});
+        
+        var controlDeleteFeature = new DeleteFeatureControl(controlModifyFeature,
+                {displayClass: "olControlDeleteFeature"});
+
+        panelControls.push(controlDeleteFeature);
         panelControls.push(controlModifyFeature);
     }
     
