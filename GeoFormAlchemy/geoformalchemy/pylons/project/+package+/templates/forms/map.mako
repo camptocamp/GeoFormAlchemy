@@ -30,17 +30,17 @@ options['openlayers_lib'] = 'http://openlayers.org/api/OpenLayers.js'
 }
 
 .olControlEditingToolbar .olControlModifyFeatureItemActive { 
-    background-image: url("/img/admin/select_feature_on.png");
+    background-image: url("/adminapp/images/select_feature_on.png");
 }
 .olControlEditingToolbar .olControlModifyFeatureItemInactive { 
-    background-image: url("/img/admin/select_feature_off.png");
+    background-image: url("/adminapp/images/select_feature_off.png");
 }
 
 .olControlEditingToolbar .olControlDeleteFeatureItemActive { 
-    background-image: url("/img/admin/remove_feature_on.png");
+    background-image: url("/adminapp/images/remove_feature_on.png");
 }
 .olControlEditingToolbar .olControlDeleteFeatureItemInactive { 
-    background-image: url("/img/admin/remove_feature_off.png");
+    background-image: url("/adminapp/images/remove_feature_off.png");
 }
 </style>
 
