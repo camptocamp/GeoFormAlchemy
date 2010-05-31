@@ -97,7 +97,7 @@ class GeometryFieldRenderer(FieldRenderer):
         """
         form_value = self.params.getone(self.name)
         
-        if form_value is not None and form_value != '':
+        if form_value is not None and form_value.strip() != '':
             options = self.__get_options()
             geom_srid = self.field.type.srid
             map_srid = options.get('map_srid', geom_srid)
@@ -109,7 +109,7 @@ class GeometryFieldRenderer(FieldRenderer):
                 
                 return session.scalar(query)
                 
-        return form_value
+        return None
     
     def __render_map(self, read_only):
         options = self.__get_options()

@@ -118,4 +118,10 @@ class TestGeometryFieldRenderer(unittest.TestCase):
         ok_(isinstance(session.scalar_args[0], functions.wkt), 'The geometry was not queried as WKT')
         ok_(isinstance(session.scalar_args[0].arguments[0], functions.transform), 'The geometry was not reprojected')
         
+        params = {'Spot--the_geom': ' ', 'Spot--name': ''}
+        spot_fieldset = FieldSet(Spot, data = params, session=session)
+        spot_fieldset.validate()
+        spot_fieldset.sync()
+        ok_(spot_fieldset.model.the_geom is None, 'Geometry is not set to None for empty strings')
+        
         
