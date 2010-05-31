@@ -6,9 +6,9 @@ version = '0.1'
 setup(name='GeoFormAlchemy',
       version=version,
       author='Camptocamp',
-      description="GeoFormAlchemy",
-      long_description="""\
-""",
+      url='http://github.com/camptocamp/GeoFormAlchemy',
+      description="GeoFormAlchemy - a extension for FormAlchemy that adds support for spatial databases",
+      long_description=open('README.rst').read(),
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
