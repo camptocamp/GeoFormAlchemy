@@ -9,7 +9,7 @@ that makes it possible to generate forms for model classes that use the geometry
 Requirements
 ------------
 
-Requires FormAlchemy and GeoAlchemy >=0.2.
+Requires FormAlchemy and GeoAlchemy >=0.3.
 
 Installation
 ------------
