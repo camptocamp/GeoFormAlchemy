@@ -29,7 +29,7 @@ setup(name='GeoFormAlchemy',
       zip_safe=True,
       install_requires=[
             'FormAlchemy>=1.3.0,<=1.3.99',
-            'GeoAlchemy>=0.2,<=0.2.99'
+            'GeoAlchemy>=0.3,<=0.3.99'
       ],
       entry_points="""
        [paste.paster_create_template]
