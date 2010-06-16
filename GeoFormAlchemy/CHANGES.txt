@@ -1,6 +1,12 @@
 GeoFormAlchemy Change Log
 =========================
 
+0.1.1
+-----
+
+* Fix installation issue by adding MANIFEST.IN with "include README.rst" as the
+  content
+
 0.1
 ---
 
