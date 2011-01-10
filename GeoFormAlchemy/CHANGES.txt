@@ -5,6 +5,7 @@ GeoFormAlchemy Change Log
 ---
 
 * Change GeoAlchemy requirement to >=0.4,<=0.4.99
+* Correct bug where geometries are always transformed on update and create
 
 0.1.1
 -----
