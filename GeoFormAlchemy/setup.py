@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.1'
+version = '0.2'
 
 setup(name='GeoFormAlchemy',
       version=version,
@@ -29,7 +29,7 @@ setup(name='GeoFormAlchemy',
       zip_safe=True,
       install_requires=[
             'FormAlchemy>=1.3.0,<=1.3.99',
-            'GeoAlchemy>=0.3,<=0.3.99'
+            'GeoAlchemy>=0.4,<=0.4.99'
       ],
       entry_points="""
        [paste.paster_create_template]
