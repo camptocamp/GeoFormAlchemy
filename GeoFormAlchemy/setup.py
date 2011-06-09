@@ -28,8 +28,8 @@ setup(name='GeoFormAlchemy',
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-            'FormAlchemy>=1.3.0,<=1.3.99',
-            'GeoAlchemy>=0.4,<=0.4.99'
+            'FormAlchemy>=1.3.0',
+            'GeoAlchemy>=0.4'
       ],
       entry_points="""
        [paste.paster_create_template]
