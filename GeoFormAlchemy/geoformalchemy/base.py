@@ -117,7 +117,7 @@ class GeometryFieldRenderer(FieldRenderer):
         options = self.__get_options()
         geometry_type = self.__get_type_information()
         
-        if len(self.errors) > 0:
+        if len(self.field.errors) > 0:
             # if re-displaying a form with errors, get the WKT string
             # from the form submission
             wkt = self.params.getone(self.name)
