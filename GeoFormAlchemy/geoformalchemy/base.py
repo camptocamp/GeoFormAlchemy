@@ -154,7 +154,7 @@ class GeometryFieldRenderer(FieldRenderer):
             the 'map.mako' template file is in the same folder as the other FormAlchemy template files.
             This is the case when used inside a Pylons app."""
             return config.engine.render('map', **template_args)
-        except (TemplateLookupException, AttributeError):
+        except (TemplateLookupException, AttributeError, ValueError):
             # otherwise render the default template using an own template engine
             map_template = self.get_templates().get_template('map.mako')
             return map_template.render(**template_args)
