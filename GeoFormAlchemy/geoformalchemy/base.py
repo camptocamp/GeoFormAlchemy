@@ -99,15 +99,8 @@ class GeometryFieldRenderer(FieldRenderer):
         
         if form_value is not None and form_value.strip() != '':
             options = self.__get_options()
-            geom_srid = self.field.type.srid
-            map_srid = options.get('map_srid', geom_srid)
+            map_srid = options.get('map_srid', self.field.type.srid)
             wkt_elt = WKTSpatialElement(form_value, srid=map_srid)
-            
-            if geom_srid != map_srid:
-                # if the map uses a different CRS, we have to reproject
-                query = functions.wkt(functions.transform(wkt_elt, geom_srid))
-                session = self.field.parent.session
-                return session.scalar(query)
 
             return wkt_elt
                 
