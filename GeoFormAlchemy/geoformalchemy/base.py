@@ -92,18 +92,14 @@ class GeometryFieldRenderer(FieldRenderer):
     def deserialize(self):
         """Turns the user input into a GeoAlchemy geometry, which
         can be stored in the database.
-        
-        If necessary the geometry is reprojected by making a database query. 
         """
         form_value = self.params.getone(self.name)
         
         if form_value is not None and form_value.strip() != '':
-            options = self.__get_options()
-            map_srid = options.get('map_srid', self.field.type.srid)
-            wkt_elt = WKTSpatialElement(form_value, srid=map_srid)
+            return WKTSpatialElement(
+                form_value,
+                srid=self.__get_options().get('map_srid', self.field.type.srid))
 
-            return wkt_elt
-                
         return None
     
     def __render_map(self, read_only):
