@@ -23,6 +23,11 @@ options['openlayers_lib'] = 'http://openlayers.org/dev/OpenLayers.js'
     width: ${map_width or options['map_width']}px;
     height: ${map_height or options['map_height']}px;
     border: 1px solid #ccc;
+## temporarily fix issue addressed in openlayers ticket #1635 :
+## http://trac.osgeo.org/openlayers/ticket/1635#comment:7
+## (to be remove when this ticket is closed)
+    position: relative;
+    z-index: 0;
 }
 
 .olControlAttribution {
