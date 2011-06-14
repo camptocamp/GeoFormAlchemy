@@ -12,7 +12,7 @@ options['zoom'] = 4
 options['map_width'] = 512
 options['map_height'] = 256
 options['base_layer'] = 'new OpenLayers.Layer.WMS("WMS", "http://labs.metacarta.com/wms/vmap0", {layers: "basic"})'
-options['openlayers_lib'] = 'http://openlayers.org/api/OpenLayers.js'
+options['openlayers_lib'] = 'http://openlayers.org/dev/OpenLayers.js'
 
 %>
 
