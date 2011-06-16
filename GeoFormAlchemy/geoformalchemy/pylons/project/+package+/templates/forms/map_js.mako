@@ -169,11 +169,9 @@ geoformalchemy.init_map = function (
                 update_geometry_field(collection_feature);
 
                 return true;
-            } else if (vlayer.features.length > 1) {
+            } else if (vlayer.features.length > 0) {
                 // remove old feature(s)
-                var old_features = [vlayer.features[0]];
-                vlayer.removeFeatures(old_features);
-                vlayer.destroyFeatures(old_features);
+                vlayer.destroyFeatures();
             }
 
             update_geometry_field(event.feature);
