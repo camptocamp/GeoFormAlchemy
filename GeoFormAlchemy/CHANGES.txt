@@ -1,6 +1,14 @@
 GeoFormAlchemy Change Log
 =========================
 
+0.3
+--
+
+* Make GeoFormAlchemy work with pyramid_formalchemy
+* Remove upper limit on dependencies
+* Bugfix: when adding a feature to the map remove the previous one (issue #3)
+* Bugfix: avoid transforming geometries multiple times (issue #2)
+
 0.2
 ---
 
