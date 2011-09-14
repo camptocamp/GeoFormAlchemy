@@ -164,7 +164,7 @@ geoformalchemy.init_map = function (
         var before_feature_added_handler = function (event) {
             if (is_collection) {
                 var collection_feature = get_feature_collection();
-                //collection_feature.push(event.feature);
+                collection_feature.push(event.feature);
 
                 update_geometry_field(collection_feature);
 
