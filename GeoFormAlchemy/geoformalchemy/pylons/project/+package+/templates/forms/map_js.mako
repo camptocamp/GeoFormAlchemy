@@ -243,9 +243,7 @@ geoformalchemy.init_map = function (
         for (var i = 0; i < features.length; i++) {
             geometry_collection.addComponents(features[i].geometry);
         }
-        var centroid = geometry_collection.getCentroid();
-        
-        map.setCenter(new OpenLayers.LonLat(centroid.x, centroid.y), zoom);
+        map.zoomToExtent(geometry_collection.getBounds());
     } else {
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
     }   
