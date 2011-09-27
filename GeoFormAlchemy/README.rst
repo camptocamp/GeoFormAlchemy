@@ -113,6 +113,15 @@ called on the field ``the_geom`` of the custom ``FieldSet`` changes the backgrou
     If ``show_map`` is set to ``False``, the geometry will be displayed as WKT string 
     inside a text input field.
 
+``insert_libs`` (default: ``True``)
+    If ``insert_libs`` is set to ``False``, OpenLayers, GeoFormAlchemy JS and
+    stylesheet are not loaded. You have to do it yourself.
+
+``run_js`` (default: ``True``)
+    If ``run_js`` is set to ``False``, The call to
+    ``geoformalchemy.init_map()`` is not done. You can call it manuallay with
+    ``fs.render_fields['the_geom'].renderer.render_runjs()``
+
 Template files
 ~~~~~~~~~~~~~~~
 
