@@ -114,13 +114,20 @@ called on the field ``the_geom`` of the custom ``FieldSet`` changes the backgrou
     inside a text input field.
 
 ``insert_libs`` (default: ``True``)
-    If ``insert_libs`` is set to ``False``, OpenLayers, GeoFormAlchemy JS and
-    stylesheet are not loaded. You have to do it yourself.
+    If ``insert_libs`` is set to ``False``, the OpenLayers and GeoFormAlchemy JavaScript
+    libs are not loaded in the page, nor is the default CSS for GeoFormAlchemy. If
+    ``insert_libs`` is set to ``False`` the application developer is responsible for
+    adding script and style tags for OpenLayers and GeoFormAlchemy. You'll set
+    ``insert_libs`` to ``False`` if you have multiple map fields, or if you want
+    to delay the loading of the JS code until after the page is loaded.
 
 ``run_js`` (default: ``True``)
     If ``run_js`` is set to ``False``, The call to
-    ``geoformalchemy.init_map()`` is not done. You can call it manuallay with
-    ``fs.render_fields['the_geom'].renderer.render_runjs()``
+    ``geoformalchemy.init_map()`` is not done. You can call it manually with
+    ``fs.render_fields['the_geom'].renderer.render_runjs()``. You'll set
+    ``run_js`` to ``False`` if you want to delay the initialization of the map
+    until after the page is loaded. If you want to set ``run_js`` to ``False``
+    you probably also want to set ``insert_libs`` to ``False``.
 
 Template files
 ~~~~~~~~~~~~~~~
