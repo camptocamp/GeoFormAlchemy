@@ -53,7 +53,7 @@ options['openlayers_lib'] = 'http://openlayers.org/dev/OpenLayers.js'
         style="width: ${map_width or options['map_width']}px; height: ${map_height or options['map_height']}px;"></div>
     % if run_js:
     <script>
-    ${renderer.render_runjs()}
+    ${_renderer.render_runjs()}
     </script>
     % endif
     <br />
