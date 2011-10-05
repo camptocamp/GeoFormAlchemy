@@ -130,7 +130,10 @@ class GeometryFieldRenderer(FieldRenderer):
                         'openlayers_lib' : options.get('openlayers_lib', None),
                         'insert_libs' : options.get('insert_libs', True),
                         'run_js' : options.get('run_js', True),
-                        'renderer': self
+                        # we use _renderer as renderer is a named argument
+                        # of pyramid_formalchemy.utils.TemplateEngine:__init__
+                        # This is fragile!
+                        '_renderer': self,
                     }
 
         try:
