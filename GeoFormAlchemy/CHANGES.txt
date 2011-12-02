@@ -1,6 +1,18 @@
 GeoFormAlchemy Change Log
 =========================
 
+0.4
+---
+
+* fix bug where the wkt was incorrect in the geometry field for geometry
+  collections (issue #4)
+* add options ``insert_libs`` and ``run_js`` allowing deferring the loading
+  of OpenLayers and GeoFormAlchemy js and css, and the creation of the map
+  in the page (issue #5)
+* on edit center the map on the feature bounds (issue #6)
+* fix bug where GeoFormAlchemy and Pyramid clashed on the use of the
+  ``renderer`` positional argument (issue #7)
+
 0.3.1
 -----
 
@@ -8,7 +20,7 @@ GeoFormAlchemy Change Log
   package.
 
 0.3
---
+---
 
 * Make GeoFormAlchemy work with pyramid_formalchemy
 * Remove upper limit on dependencies
