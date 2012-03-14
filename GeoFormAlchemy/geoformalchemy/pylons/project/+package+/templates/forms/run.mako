@@ -9,7 +9,7 @@ options = {}
 options['default_lon'] = 10
 options['default_lat'] = 45
 options['zoom'] = 4
-options['base_layer'] = 'new OpenLayers.Layer.WMS("WMS", "http://labs.metacarta.com/wms/vmap0", {layers: "basic"})'
+options['base_layer'] = 'new OpenLayers.Layer.WMS("WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: "basic"})'
 
 %>
 geoformalchemy.init_map(
