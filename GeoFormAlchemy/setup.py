@@ -26,7 +26,7 @@ setup(name='GeoFormAlchemy',
       license='MIT',
       packages=find_packages(exclude=['tests']),
       include_package_data=True,
-      zip_safe=True,
+      zip_safe=False,
       install_requires=[
             'FormAlchemy>=1.3.0',
             'GeoAlchemy>=0.4'
