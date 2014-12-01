@@ -3,15 +3,13 @@ from formalchemy.forms import FieldSet
 from formalchemy.tables import Grid
 from formalchemy import helpers as h, config
 
-from geoalchemy.geometry import (Point, Curve, LineString,
-    Polygon, MultiPoint, MultiLineString, MultiPolygon)
-from geoalchemy.base import PersistentSpatialElement, WKTSpatialElement
-from geoalchemy.functions import functions
+from geoalchemy2 import WKTElement, WKBElement, functions
 
 from mako.lookup import TemplateLookup
 from mako.exceptions import TemplateLookupException
 
 import os
+
 
 class GeometryFieldRenderer(FieldRenderer):
     """An extension for FormAlchemy that renders GeoAlchemy's geometry type
@@ -96,15 +94,18 @@ class GeometryFieldRenderer(FieldRenderer):
         form_value = self.params.getone(self.name)
 
         if form_value is not None and form_value.strip() != '':
-            return WKTSpatialElement(
-                form_value,
-                srid=self.__get_options().get('map_srid', self.field.type.srid))
+            geom_srid = self.field.type.srid
+            map_srid = self.__get_options().get('map_srid', geom_srid)
 
-        return None
+            if geom_srid != map_srid:
+                # if the map uses a different CRS we have to ask the database
+                # to reproject the geometry
+                return functions.ST_Transform(WKTElement(form_value, map_srid), geom_srid)
+            else:
+                return WKTElement(form_value, map_srid)
 
     def __render_map(self, read_only):
         options = self.__get_options()
-        geometry_type = self.__get_type_information()
 
         if len(self.field.errors) > 0:
             # if re-displaying a form with errors, get the WKT string
@@ -112,7 +113,7 @@ class GeometryFieldRenderer(FieldRenderer):
             wkt = self.params.getone(self.name)
         else:
             # if displaying a new form, try to query the geometry in WKT
-            wkt = self.__get_wkt_for_field(options);
+            wkt = self.__get_wkt_for_field(options)
 
         if not options.get('show_map', True):
             # if no map should be shown, just display a text field
@@ -122,19 +123,20 @@ class GeometryFieldRenderer(FieldRenderer):
                 return h.text_field(self.name, value=wkt)
 
         template_args = {
-                        'field_name' : self.name,
-                        'input_field' : h.hidden_field(self.name, value=wkt),
-                        #'input_field' : h.text_field(self.name, value=wkt), # for debug
-                        'map_width' : options.get('map_width', None),
-                        'map_height' : options.get('map_height', None),
-                        'openlayers_lib' : options.get('openlayers_lib', None),
-                        'insert_libs' : options.get('insert_libs', True),
-                        'run_js' : options.get('run_js', True),
-                        # we use _renderer as renderer is a named argument
-                        # of pyramid_formalchemy.utils.TemplateEngine:__init__
-                        # This is fragile!
-                        '_renderer': self,
-                    }
+            'field_name': self.name,
+            'input_field': h.hidden_field(self.name, value=wkt),
+            # 'input_field': h.text_field(self.name, value=wkt), # for debug
+            'map_width': options.get('map_width', None),
+            'map_height': options.get('map_height', None),
+            'openlayers_lib': options.get('openlayers_lib', None),
+            'insert_libs': options.get('insert_libs', True),
+            'run_js': options.get('run_js', True),
+            # we use _renderer as renderer is a named argument
+            # of pyramid_formalchemy.utils.TemplateEngine:__init__
+            # This is fragile!
+            '_renderer': self,
+            'read_only': read_only,
+        }
 
         try:
             """Try to render the template with the FormAlchemy template engine which assumes that
@@ -156,19 +158,19 @@ class GeometryFieldRenderer(FieldRenderer):
             wkt = self.params.getone(self.name)
         else:
             # if displaying a new form, try to query the geometry in WKT
-            wkt = self.__get_wkt_for_field(options);
+            wkt = self.__get_wkt_for_field(options)
 
         template_args = {
-                        'field_name' : self.name,
-                        'wkt' : wkt,
-                        'read_only' : 'true' if read_only else 'false',
-                        'is_collection' : 'true' if geometry_type['is_collection'] else 'false',
-                        'geometry_type' : geometry_type['geometry_type'] ,
-                        'default_lat' : options.get('default_lat', None),
-                        'default_lon' : options.get('default_lon', None),
-                        'zoom' : options.get('zoom', None),
-                        'base_layer' : options.get('base_layer', None),
-                    }
+            'field_name': self.name,
+            'wkt': wkt,
+            'read_only': 'true' if read_only else 'false',
+            'is_collection': 'true' if geometry_type['is_collection'] else 'false',
+            'geometry_type': geometry_type['geometry_type'],
+            'default_lat': options.get('default_lat', None),
+            'default_lon': options.get('default_lon', None),
+            'zoom': options.get('zoom', None),
+            'base_layer': options.get('base_layer', None),
+        }
 
         try:
             """Try to render the template with the FormAlchemy template engine which assumes that
@@ -186,21 +188,21 @@ class GeometryFieldRenderer(FieldRenderer):
 
         If necessary the geometry is reprojected.
         """
-        if self.raw_value is not None and isinstance(self.raw_value, PersistentSpatialElement):
+        if self.raw_value is not None and isinstance(self.raw_value, WKBElement):
             geom_srid = self.field.type.srid
             map_srid = options.get('map_srid', geom_srid)
 
             if geom_srid != map_srid:
                 # if the map uses a different CRS we have to ask the database
                 # to reproject the geometry
-                query = functions.wkt(functions.transform(self.raw_value, map_srid))
+                query = functions.ST_AsText(functions.ST_Transform(self.raw_value, map_srid))
             else:
                 query = self.raw_value.wkt
 
             session = self.field.parent.session
             return session.scalar(query)
         else:
-            return '';
+            return ''
 
     def __get_type_information(self):
         """This method maps GeoAlchemy geometry types to the
@@ -210,25 +212,22 @@ class GeometryFieldRenderer(FieldRenderer):
             is_collection: True for Multi* geometry types
             geometry_type: The OpenLayers geometry type
         """
-        geom_type = self.field.type
+        geom_type = self.field.type.geometry_type
 
-        if isinstance(geom_type, (Point, MultiPoint)):
-            is_collection = isinstance(geom_type, MultiPoint)
+        is_collection = geom_type not in ('POINT', 'CURVE', 'LINESTRING', 'POLYGON')
+        if geom_type in ('POINT', 'MULTIPOINT'):
             geometry_type = 'Point'
-        elif isinstance(geom_type, (Curve, LineString, MultiLineString)):
-            is_collection = isinstance(geom_type, MultiLineString)
+        elif geom_type in ('CURVE', 'LINESTRING', 'MULTILINESTRING'):
             geometry_type = 'Path'
-        elif isinstance(geom_type, (Polygon, MultiPolygon)):
-            is_collection = isinstance(geom_type, MultiPolygon)
+        elif geom_type in ('POLYGON', 'MULTIPOLYGON'):
             geometry_type = 'Polygon'
         else:
-            is_collection = True
             geometry_type = 'Collection'
 
         return {
-                'is_collection' : is_collection,
-                'geometry_type' : geometry_type
-                }
+            'is_collection': is_collection,
+            'geometry_type': geometry_type
+        }
 
     def __get_options(self):
         """Turns the options list, a list of tuples e.g. [('..', '..'), ('..', '..')],
@@ -238,7 +237,7 @@ class GeometryFieldRenderer(FieldRenderer):
         return dict(options_list)
 
     def get_templates(self):
-        if self.__templates == None:
+        if self.__templates is None:
             dirname = os.path.join(os.path.dirname(__file__), 'pylons', 'project', '+package+', 'templates', 'forms')
             self.__templates = TemplateLookup([dirname], input_encoding='utf-8', output_encoding='utf-8')
 

@@ -184,7 +184,7 @@ geoformalchemy.init_map = function (
         vlayer.events.on({"afterfeaturemodified": feature_modified_handler});
         
         panelControls = [new OpenLayers.Control.Navigation()];
-        
+
         if (geometry_type === 'Polygon' || geometry_type === 'Collection') {
             panelControls.push(new OpenLayers.Control.DrawFeature(vlayer,
                      OpenLayers.Handler.Polygon,
