@@ -4,6 +4,7 @@ from formalchemy.tables import Grid
 from formalchemy import helpers as h, config
 
 from geoalchemy2 import WKTElement, WKBElement, functions
+from geoalchemy2.shape import to_shape
 
 from mako.lookup import TemplateLookup
 from mako.exceptions import TemplateLookupException
@@ -196,11 +197,10 @@ class GeometryFieldRenderer(FieldRenderer):
                 # if the map uses a different CRS we have to ask the database
                 # to reproject the geometry
                 query = functions.ST_AsText(functions.ST_Transform(self.raw_value, map_srid))
+                session = self.field.parent.session
+                return session.scalar(query)
             else:
-                query = self.raw_value.wkt
-
-            session = self.field.parent.session
-            return session.scalar(query)
+                return to_shape(self.raw_value).wkt
         else:
             return ''
 
