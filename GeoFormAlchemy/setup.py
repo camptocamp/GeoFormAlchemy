@@ -27,7 +27,8 @@ setup(
     zip_safe=False,
     install_requires=[
         'FormAlchemy>=1.3.0',
-        'GeoAlchemy2'
+        'GeoAlchemy2',
+        'Shapely'
     ],
     entry_points={
         'paste.paster_create_template': [
